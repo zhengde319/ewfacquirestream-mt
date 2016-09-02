@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="VSDebug|Win32">
+      <Configuration>VSDebug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{277E1A40-2BB7-4FD5-8338-0FB12567F8BC}</ProjectGuid>
+    <RootNamespace>ewfacquirestream-mt</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='VSDebug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='VSDebug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>11.0.50727.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\Release</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='VSDebug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;HAVE_LOCAL_LIBCSTRING;HAVE_LOCAL_LIBCERROR;HAVE_LOCAL_LIBCTHREADS;HAVE_LOCAL_LIBCDATA;HAVE_LOCAL_LIBCDATETIME;HAVE_LOCAL_LIBCLOCALE;HAVE_LOCAL_LIBCNOTIFY;HAVE_LOCAL_LIBCSPLIT;HAVE_LOCAL_LIBUNA;HAVE_LOCAL_LIBCFILE;HAVE_LOCAL_LIBCPATH;HAVE_LOCAL_LIBBFIO;HAVE_LOCAL_LIBHMAC;HAVE_LOCAL_LIBCSYSTEM;HAVE_LOCAL_LIBODRAW;HAVE_LOCAL_LIBSMDEV;HAVE_LOCAL_LIBSMRAW;HAVE_LOCAL_LIBFVALUE;HAVE_LOCAL_LIBFDATA;HAVE_LOCAL_LIBFCACHE;LIBEWF_DLL_IMPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat />
+      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalIncludeDirectories>..\..\include;..\..\common;..\..\libcstring;..\..\libcerror;..\..\libcthreads;..\..\libcdata;..\..\libcdatetime;..\..\libclocale;..\..\libcnotify;..\..\libcsplit;..\..\libuna;..\..\libcfile;..\..\libcpath;..\..\libbfio;..\..\libcsystem;..\..\libhmac;..\..\ewftools;..\..\..\zlib;..\..\libodraw;..\..\libsmdev;..\..\libsmraw;..\..\libfvalue;..\..\libfdata;..\..\libfcache;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>advapi32.lib;rpcrt4.lib;..\Release\libcerror.lib;..\Release\libcstring.lib;..\Release\libcnotify.lib;..\Release\libhmac.lib;..\Release\libewf.lib;..\Release\libcdata.lib;..\Release\libcdatetime.lib;..\Release\libcsplit.lib;..\Release\libcsystem.lib;..\Release\libclocale.lib;..\Release\libuna.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='VSDebug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\include;..\..\common;..\..\libcstring;..\..\libcerror;..\..\libcthreads;..\..\libcdata;..\..\libcdatetime;..\..\libclocale;..\..\libcnotify;..\..\libcsplit;..\..\libuna;..\..\libcfile;..\..\libcpath;..\..\libbfio;..\..\libcsystem;..\..\libhmac;..\..\ewftools;..\..\..\zlib;..\..\libodraw;..\..\libsmdev;..\..\libsmraw;..\..\libfvalue;..\..\libfdata;..\..\libfcache;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;HAVE_LOCAL_LIBCSTRING;HAVE_LOCAL_LIBCERROR;HAVE_LOCAL_LIBCTHREADS;HAVE_LOCAL_LIBCDATA;HAVE_LOCAL_LIBCDATETIME;HAVE_LOCAL_LIBCLOCALE;HAVE_LOCAL_LIBCNOTIFY;HAVE_LOCAL_LIBCSPLIT;HAVE_LOCAL_LIBUNA;HAVE_LOCAL_LIBCFILE;HAVE_LOCAL_LIBCPATH;HAVE_LOCAL_LIBBFIO;HAVE_LOCAL_LIBHMAC;HAVE_LOCAL_LIBCSYSTEM;HAVE_LOCAL_LIBODRAW;HAVE_LOCAL_LIBSMDEV;HAVE_LOCAL_LIBSMRAW;HAVE_LOCAL_LIBFVALUE;HAVE_LOCAL_LIBFDATA;HAVE_LOCAL_LIBFCACHE;LIBEWF_DLL_IMPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <SmallerTypeCheck>true</SmallerTypeCheck>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>advapi32.lib;rpcrt4.lib;..\Release\libcerror.lib;..\Release\libcstring.lib;..\Release\libcnotify.lib;..\Release\libhmac.lib;..\Release\libewf.lib;..\Release\libcdata.lib;..\Release\libcdatetime.lib;..\Release\libcsplit.lib;..\Release\libcsystem.lib;..\Release\libclocale.lib;..\Release\libuna.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\ewftools\byte_size_string.c" />
+    <ClCompile Include="..\..\ewftools\digest_hash.c" />
+    <ClCompile Include="..\..\ewftools-mt\ewfacquirestream.c" />
+    <ClCompile Include="..\..\ewftools\ewfinput.c" />
+    <ClCompile Include="..\..\ewftools\ewfoutput.c" />
+    <ClCompile Include="..\..\ewftools-mt\fifo_queue.cpp" />
+    <ClCompile Include="..\..\ewftools\guid.c" />
+    <ClCompile Include="..\..\ewftools\imaging_handle.c" />
+    <ClCompile Include="..\..\ewftools\log_handle.c" />
+    <ClCompile Include="..\..\ewftools\platform.c" />
+    <ClCompile Include="..\..\ewftools\process_status.c" />
+    <ClCompile Include="..\..\ewftools\storage_media_buffer.c" />
+    <ClCompile Include="..\..\ewftools-mt\threading.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\ewftools\byte_size_string.h" />
+    <ClInclude Include="..\..\ewftools\digest_hash.h" />
+    <ClInclude Include="..\..\ewftools\ewfcommon.h" />
+    <ClInclude Include="..\..\ewftools\ewfinput.h" />
+    <ClInclude Include="..\..\ewftools\ewfoutput.h" />
+    <ClInclude Include="..\..\ewftools\ewftools_libcdatetime.h" />
+    <ClInclude Include="..\..\ewftools\ewftools_libewf.h" />
+    <ClInclude Include="..\..\ewftools\ewftools_libhmac.h" />
+    <ClInclude Include="..\..\ewftools\ewftools_libodraw.h" />
+    <ClInclude Include="..\..\ewftools\ewftools_libsmdev.h" />
+    <ClInclude Include="..\..\ewftools\ewftools_libsmraw.h" />
+    <ClInclude Include="..\..\ewftools\ewftools_libuna.h" />
+    <ClInclude Include="..\..\ewftools-mt\fifo_queue.hpp" />
+    <ClInclude Include="..\..\ewftools\guid.h" />
+    <ClInclude Include="..\..\ewftools\imaging_handle.h" />
+    <ClInclude Include="..\..\ewftools\log_handle.h" />
+    <ClInclude Include="..\..\ewftools\platform.h" />
+    <ClInclude Include="..\..\ewftools\process_status.h" />
+    <ClInclude Include="..\..\ewftools\storage_media_buffer.h" />
+    <ClInclude Include="..\..\ewftools-mt\threading.hpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

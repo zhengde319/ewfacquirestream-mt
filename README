@@ -1,0 +1,58 @@
+Dependencies
+
+The program was built in Visual Studio 2012.
+
+libewf requires:
+* zlib
+* bzip2
+  (optional for EWF2 support)
+* libcrypto (OpenSSL) or Windows Crypto API (from the Windows Platform SDK)
+  (optional but recommended)
+
+ewfacquirestream-mt Building:
+* ewfacquirestream building
+  - Run and build the project in path ../msvscpp/ewfacquirestream 
+  
+* ewfacquirestream-mt building
+  - Run and build the project in path of ../msvscpp/ewfacquirestream-mt
+  
+* The executalbe is on the path of ../msvscpp/Release/.
+  
+ewftools require:
+* libcrypto (OpenSSL) or Windows Crypto API (from the Windows Platform SDK)
+  (optional but recommended)
+* libuuid or Windows RPC API
+  (optional but recommended)
+
+ewfmount requires:
+* libfuse
+  (optional but recommended)
+
+
+See:
+* http://code.google.com/p/libewf/wiki/Building
+* README.dll
+* README.macosx
+
+I'm modified the following code:
+* ewfacquirestream-mt Project.
+
+a) The following parts are added to fix link errors, when the project is built.
+- Add "..\..\libodraw, ..\..\libsmdec, ..\..\libsmraw, ..\..\libvalue, ..\..\libfdata, ..\..\libcache" to "\C/C++\General\Additional Include Directories" of Property Pages on ewfacquirestream-mt project
+- Add "HAVE_LOCAL_LIBODRAW, HAVE_LOCAL_LIBSMDEV, HAVE_LOCAL_LIBSMRAW, HAVE_LOCAL_LIBFVALUE, HAVE_LOCAL_LIBFDATA, HAVE_LOCAL_LIBFCACHE" to "\C/C++\Preprocessor\Preprocessor Definitions" of Property Pages on ewfacquirestream-mt project
+- Add line 59 in threading.hpp (int verbose_messages)
+
+b) The following codes were added to track errors. 
+- Add line 235 in ewfacquirestream.c ( uint8_t read_error_retries)
+- Add line 244, 255 in ewfacquirestream.c ( int32_t read_number_of_errors = 0; uint32_t read_error_offset = 0; )
+- Add line 657, 658 in ewfacquirestream.c ( read_error_retries, acquiry_count,)
+
+c) The following codes were added into the source code.
+- Add line 458 in ewfacquirestream.c ( uint8_t print_status_information; )
+- Add line 980, 984 in ewfacquirestream.c (uint8_t print_status_information = 1; uint8_t verbose = 0; )
+- Add line 1777 in ewfacquirestream.c ( read_error_retries )
+
+d) The errors were fixed, when reading the data.
+- Modify line 334 ~ 448 in ewfacquirestream.c
+
+
