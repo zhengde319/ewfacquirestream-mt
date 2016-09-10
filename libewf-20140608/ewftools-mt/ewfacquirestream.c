@@ -231,27 +231,6 @@ ssize_t ewfacquirestream_read_chunk(
          int input_file_descriptor,
          uint8_t *buffer,
          size_t buffer_size,
-         size32_t chunk_size,
-         ssize64_t total_read_count,
-		 uint8_t read_error_retries,		/*  Add line ( For error tracking ) Zheng De <zheng.de@yahoo.com> */
-         libcerror_error_t **error )
-{
-	static char *function         = "ewfacquirestream_read_chunk";
-	ssize_t read_count            = 0;
-	ssize_t buffer_offset         = 0;
-	size_t read_size              = 0;
-	size_t bytes_to_read          = 0;
-	uint32_t chunk_offset         = 0;		/*  Add line ( chunk_offset value operation ) Zheng De <zheng.de@yahoo.com> */
-	int32_t read_number_of_errors = 0;      /*  Add line ( For error tracking ) Zheng De <zheng.de@yahoo.com> */
-	uint32_t read_error_offset    = 0;
-
-	if( handle == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid handle.",
 		 function );
 
 		return( -1 );
@@ -331,219 +310,7 @@ ssize_t ewfacquirestream_read_chunk(
 		 */
 		chunk_offset = 0;
 		while( bytes_to_read > 0 )
-		{
-			read_count = libcsystem_file_io_read(
-			              input_file_descriptor,
-			              &( buffer[ buffer_offset + chunk_offset ] ),
-			              bytes_to_read );
-///////*  Add line ( The errors were fixed, when reading the data. ) Zheng De <zheng.de@yahoo.com> *////////
-			if( read_count <= -1 )
-			{
-				if( ( errno == ESPIPE )
-				 || ( errno == EPERM )
-				 || ( errno == ENXIO )
-				 || ( errno == ENODEV ) )
-				{
-					if( errno == ESPIPE )
-					{
-						libcerror_error_set(
-						 error,
-						 LIBCERROR_ERROR_DOMAIN_IO,
-						 LIBCERROR_IO_ERROR_READ_FAILED,
-						 "%s: error reading data: invalid seek.",
-						 function );
-					}
-					else if( errno == EPERM )
-					{
-						libcerror_error_set(
-						 error,
-						 LIBCERROR_ERROR_DOMAIN_IO,
-						 LIBCERROR_IO_ERROR_READ_FAILED,
-						 "%s: error reading data: operation not permitted.",
-						 function );
-					}
-					else if( errno == ENXIO )
-					{
-						libcerror_error_set(
-						 error,
-						 LIBCERROR_ERROR_DOMAIN_IO,
-						 LIBCERROR_IO_ERROR_READ_FAILED,
-						 "%s: error reading data: no such device or address.",
-						 function );
-					}
-					else if( errno == ENODEV )
-					{
-						libcerror_error_set(
-						 error,
-						 LIBCERROR_ERROR_DOMAIN_IO,
-						 LIBCERROR_IO_ERROR_READ_FAILED,
-						 "%s: error reading data: no such device.",
-						 function );
-					}
-					else
-					{
-						libcerror_system_set_error(
-						 error,
-						 LIBCERROR_ERROR_DOMAIN_IO,
-						 LIBCERROR_IO_ERROR_READ_FAILED,
-						 errno,
-						 "%s: error reading data.",
-						 function );
-					}
-					return( -1 );
-				}
-			}
-			else
-			{
-				/* The last read is OK, correct read_count
-				 */
-				if( read_count == (ssize_t) bytes_to_read )
-				{
-					read_count = read_error_offset + bytes_to_read;
-				}
-				/* The entire read is OK
-				 */
-				if( read_count == (ssize_t) read_size )
-				{
-					break;
-				}
-				/* If no end of input can be determined
-				 */
-				/* If some bytes were read it is possible that the end of the input reached
-				 */
-				if( read_count > 0 )
-				{
-					return( (ssize32_t) ( buffer_offset + read_count ) );
-				}
-				/* No bytes were read
-				 */
-				if( read_count == 0 )
-				{
-					return( 0 );
-				}
-				/* There was a read error at a certain offset
-				 */
-				read_error_offset += (uint32_t) read_count;
-				bytes_to_read     -= read_count;
-			}
-			read_number_of_errors++;
-
-			if( read_number_of_errors > read_error_retries )
-			{
-				return( 0 );
-			}
-		}
-		buffer_size   -= read_count;
-		buffer_offset += read_count;
-
-		/* At the end of the input
-		 */
-		if( ewfacquirestream_abort != 0 )
-		{
-			break;
-		}
-	}
-/////////////////////////////          END          ////////////////////////////////
-	return( buffer_offset );
-}
-
-/* Reads the input
- * Returns 1 if successful or -1 on error
- */
-int ewfacquirestream_read_input(
-     imaging_handle_t *imaging_handle,
-     int input_file_descriptor,
-     uint8_t swap_byte_pairs,
-	 uint8_t read_error_retries,
-     uint8_t print_status_information,         /*  Add line ( The following codes were added into the source code. ) Zheng De <zheng.de@yahoo.com> */
-     uint8_t use_chunk_data_functions,
-     log_handle_t *log_handle,
-     libcerror_error_t **error )
-{
-	process_status_t *process_status             = NULL;
-	storage_media_buffer_t *storage_media_buffer = NULL;
-	threading_support_data_t *threading_data     = NULL;
-	uint8_t *data                                = NULL;
-	static char *function                        = "ewfacquirestream_read_input";
-	size64_t acquiry_count                       = 0;
-	size32_t chunk_size                          = 0;
-	size_t data_size                             = 0;
-	size_t process_buffer_size                   = 0;
-	size_t read_size                             = 0;
-	ssize_t read_count                           = 0;
-	ssize_t process_count                        = 0;
-	ssize_t write_count                          = 0;
-	uint8_t storage_media_buffer_mode            = 0;
-	int status                                   = PROCESS_STATUS_COMPLETED;
-
-	if( imaging_handle == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid imaging handle.",
-		 function );
-
-		return( -1 );
-	}
-	if( imaging_handle->process_buffer_size > (size_t) SSIZE_MAX )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_VALUE_EXCEEDS_MAXIMUM,
-		 "%s: invalid imaging handle - process buffer size value exceeds maximum.",
-		 function );
-
-		return( -1 );
-	}
-	if( input_file_descriptor == -1 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid file descriptor.",
-		 function );
-
-		return( -1 );
-	}
-	if( imaging_handle_get_chunk_size(
-	     imaging_handle,
-	     &chunk_size,
-	     error ) != 1 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_GET_FAILED,
-		 "%s: unable to retrieve chunk size.",
-		 function );
-
-		goto on_error;
-	}
-	if( chunk_size == 0 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_VALUE_MISSING,
-		 "%s: missing chunk size.",
-		 function );
-
-		return( -1 );
-	}
-	if( use_chunk_data_functions != 0 )
-	{
-		process_buffer_size       = (size_t) chunk_size;
-		storage_media_buffer_mode = STORAGE_MEDIA_BUFFER_MODE_CHUNK_DATA;
-	}
-	else
-	{
-		if( imaging_handle->process_buffer_size == 0 )
-		{
-			process_buffer_size = (size_t) chunk_size;
+e_t) chunk_size;
 		}
 		else
 		{
@@ -645,28 +412,6 @@ int ewfacquirestream_read_input(
 		      && ( ( (size64_t) imaging_handle->acquiry_size - acquiry_count ) < (size64_t) read_size ) )
 		{
 			read_size = (size_t) ( (ssize64_t) imaging_handle->acquiry_size - acquiry_count );
-		}
-		/* Read a chunk from the file descriptor
-		 */
-		read_count = ewfacquirestream_read_chunk(
-		              imaging_handle->output_handle,
-		              input_file_descriptor,
-		              storage_media_buffer->raw_buffer,
-		              storage_media_buffer->raw_buffer_size,
-		              (size32_t)read_size,
-					  read_error_retries,					/*  Add line ( The following codes were added to track errors. ) Zheng De <zheng.de@yahoo.com> */
-		              acquiry_count,						/*  Add line ( The following codes were added to track errors. ) Zheng De <zheng.de@yahoo.com> */
-		              error );
-
-		if( read_count < 0 )
-		{
-			libcerror_error_set(
-			 error,
-			 LIBCERROR_ERROR_DOMAIN_IO,
-			 LIBCERROR_IO_ERROR_READ_FAILED,
-			 "%s: error reading data from input.",
-			 function );
-
 			goto on_error;
 		}
 		if( read_count == 0 )
@@ -973,26 +718,6 @@ int main( int argc, char * const argv[] )
 
 	log_handle_t *log_handle                                        = NULL;
 
-	libcstring_system_integer_t option                              = 0;
-	size_t string_length                                            = 0;
-	uint8_t calculate_md5                                           = 1;
-	uint8_t read_error_retries                                      = 2;
-	uint8_t print_status_information                                = 1;		/*  Add line ( The following codes were added into the source code. ) Zheng De <zheng.de@yahoo.com> */
-	uint8_t resume_acquiry                                          = 0;
-	uint8_t swap_byte_pairs                                         = 0;
-	uint8_t use_chunk_data_functions                                = 0;
-	uint8_t verbose                                                 = 0;		/*  Add line ( The following codes were added into the source code. ) Zheng De <zheng.de@yahoo.com> */
-	int result                                                      = 0;
-
-	libcnotify_stream_set(
-	 stderr,
-	 NULL );
-	libcnotify_verbose_set(
-	 1 );
-
-	if( libclocale_initialize(
-             "ewftools",
-	     &error ) != 1 )
 	{
 		fprintf(
 		 stderr,
@@ -1769,24 +1494,6 @@ int main( int argc, char * const argv[] )
 		}
 	}
 	/* The multi-threaded version of ewfacquirestream allways uses the chunk data functions
-	 */
-	result = ewfacquirestream_read_input(
-	          ewfacquirestream_imaging_handle,
-	          0,
-	          swap_byte_pairs,
-			  read_error_retries,					/*  Add line ( The following codes were added into the source code. ) Zheng De <zheng.de@yahoo.com> */
-	          print_status_information,
-	          1,
-	          log_handle,
-	          &error );
-
-	if( result != 1 )
-	{
-		fprintf(
-		 stderr,
-		 "Unable to read input.\n" );
-
-		libcnotify_print_error_backtrace(
 		 error );
 		libcerror_error_free(
 		 &error );

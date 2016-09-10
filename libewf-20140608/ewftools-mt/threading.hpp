@@ -50,25 +50,6 @@ extern "C" {
 // just for ewffifotest
 int start_threads_testing();
 
-/* created the queues and initializes the compressor- and writer- threads
- * returns -1 on error
- */
-int init_threading_data_and_start_threads(
-     imaging_handle_t *imaging_handle,
-     size_t storage_media_buffer_size,
-     threading_support_data_t **threading_data,
-	 int verbose_messages,							/*  add line Zheng De <zheng.de@yahoo.com> */
-     libcerror_error_t **error );
-
-/* returns -1 on error
- */ 
-int join_threads_and_cleanup_threading_data(
-     threading_support_data_t *threading_data,
-     libcerror_error_t **error );
-
-void terminate_threads_and_cleanup_threading_data(
-      threading_support_data_t **threading_data,
-      libcerror_error_t **error );
 
 /* Adding a buffer with data to the queue -> the compressing threads will fetch them -> the writer threads writes them to the disk
  * Returns the resulting chunk size or -1 on error (to be compatible with the function imaging_handle_prepare_write_buffer())
